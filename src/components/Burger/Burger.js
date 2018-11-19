@@ -9,12 +9,15 @@ const Burger = (props) => {
             let burgerIngredientElements = [];
             for(let i=0; i<props.ingredients[ingredientName]; i++) {
                 burgerIngredientElements.push(
-                    <BurgerIngredient type={ingredientName} />
+                    <BurgerIngredient type={ingredientName} key={ingredientName+i}/>
                 )
             }
             return [...burgerIngredientElements]
-        });
-
+        })
+        .reduce( (arr, el) => {
+            return arr.concat(el);
+        }, []);   
+        console.log(transformedIngredients);
         return transformedIngredients;
     }
 
