@@ -33,6 +33,9 @@ const BuildControls = (props) => {
                     onAddIngredientClick={() => props.onAddIngredientClick(availableIngredient.type)} 
                     onRemoveIngredientClick={() => props.onRemoveIngredientClick(availableIngredient.type)} />
             )}
+            <button 
+                className={classes.OrderButton}
+                disabled={!props.isPurchaseable}>Order Now</button>
         </div>
     )
 }

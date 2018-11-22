@@ -18,7 +18,8 @@ class BurgerBuilder extends Component {
             cheese: 0,
             meat: 0,
         },
-        totalPrice: 2
+        totalPrice: 2,
+        isPurchaseable: false,  
     }
 
     onAddIngredientClick = (type) => {
@@ -33,6 +34,7 @@ class BurgerBuilder extends Component {
             ingredients: updatedIngredients,
             totalPrice: updatedPrice
         });
+        this.checkIfPurchaseable(updatedIngredients);
     }
     
     onRemoveIngredientClick = (type) => {
@@ -49,6 +51,16 @@ class BurgerBuilder extends Component {
         this.setState({
             ingredients: updatedIngredients,
             totalPrice: updatedPrice
+        });
+        this.checkIfPurchaseable(updatedIngredients);
+    }
+
+    checkIfPurchaseable(ingredients) {
+        const totalNumberOfOrderedIngredients = Object.keys(ingredients).reduce((sum, ingredient) => {
+            return sum = sum + ingredients[ingredient];
+        }, 0);
+        this.setState({
+            isPurchaseable: totalNumberOfOrderedIngredients > 0
         });
     }
 
@@ -67,7 +79,8 @@ class BurgerBuilder extends Component {
                     totalPrice={this.state.totalPrice}
                     disabledInfo={disabledInfo}
                     onAddIngredientClick={this.onAddIngredientClick} 
-                    onRemoveIngredientClick={this.onRemoveIngredientClick} />
+                    onRemoveIngredientClick={this.onRemoveIngredientClick} 
+                    isPurchaseable={this.state.isPurchaseable} />
             </Aux>
         )
     }
