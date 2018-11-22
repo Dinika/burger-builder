@@ -3,7 +3,7 @@ import classes from './BuildControls.module.css';
 import BuildControl from './BuildControl/BuildControl';
 
 const availableIngredients = [
-    {
+    { 
         label: 'Meat',
         type: 'meat'
     },
@@ -25,7 +25,12 @@ const BuildControls = (props) => {
     return (
         <div className={classes.BuildControls}>
             {availableIngredients.map( availableIngredient => 
-                <BuildControl key={availableIngredient.type} ingredientName={availableIngredient.label} />
+                <BuildControl 
+                    key={availableIngredient.type}
+                    ingredientName={availableIngredient.label} 
+                    disabledInfo={props.disabledInfo[availableIngredient.type]}
+                    onAddIngredientClick={() => props.onAddIngredientClick(availableIngredient.type)} 
+                    onRemoveIngredientClick={() => props.onRemoveIngredientClick(availableIngredient.type)} />
             )}
         </div>
     )
