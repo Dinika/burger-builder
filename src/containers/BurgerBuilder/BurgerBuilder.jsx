@@ -73,6 +73,12 @@ class BurgerBuilder extends Component {
         })
     }
 
+    onBackdropClicked() {
+        this.setState({
+            orderButtonClicked: false,
+        })
+    }
+
     render(){
         const disabledInfo = {
             ...this.state.ingredients
@@ -83,7 +89,7 @@ class BurgerBuilder extends Component {
 
         return (
             <Aux>
-                <Modal showModal={this.state.orderButtonClicked}>
+                <Modal showModal={this.state.orderButtonClicked} onBackdropClicked={this.onBackdropClicked.bind(this)}>
                     <OrderSummary ingredients = {this.state.ingredients} />
                 </Modal>
                 <Burger ingredients={this.state.ingredients} />
