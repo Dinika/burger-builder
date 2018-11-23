@@ -6,7 +6,7 @@ import Backdrop from '../Backdrop/Backdrop';
 const Modal = (props) => {
     return (
         <Aux>
-            <Backdrop showBackdrop={props.showModal} onBackdropClicked={props.onBackdropClicked} />
+            <Backdrop showBackdrop={props.showModal} onBackdropClicked={props.onPurchaseCancelled} />
             <div className={classes.Modal}
                 style={{
                     transform: props.showModal ? 'translateY(0)' : 'translate(-100vh)',

@@ -73,10 +73,14 @@ class BurgerBuilder extends Component {
         })
     }
 
-    onBackdropClicked() {
+    onPurchaseCancelled() {
         this.setState({
             orderButtonClicked: false,
         })
+    }
+
+    onPurchaseConfirmed() {
+        alert('Your order is confirmed!');
     }
 
     render(){
@@ -89,8 +93,12 @@ class BurgerBuilder extends Component {
 
         return (
             <Aux>
-                <Modal showModal={this.state.orderButtonClicked} onBackdropClicked={this.onBackdropClicked.bind(this)}>
-                    <OrderSummary ingredients = {this.state.ingredients} />
+                <Modal showModal={this.state.orderButtonClicked} onPurchaseCancelled={this.onPurchaseCancelled.bind(this)}>
+                    <OrderSummary 
+                        ingredients={this.state.ingredients} 
+                        onPurchaseCancelled={this.onPurchaseCancelled.bind(this)}
+                        onPurchaseConfirmed={this.onPurchaseConfirmed.bind(this)}
+                    />
                 </Modal>
                 <Burger ingredients={this.state.ingredients} />
                 <BuildControls 
