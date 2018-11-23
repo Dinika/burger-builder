@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import Aux from '../../HOC/Aux';
 import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
+import Modal from '../../components/UI/Modal/Modal';
+import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 
 const INGREDIENT_PRICES = {
     salad: 0.4,
@@ -19,7 +21,8 @@ class BurgerBuilder extends Component {
             meat: 0,
         },
         totalPrice: 2,
-        isPurchaseable: false,  
+        isPurchaseable: false,
+        orderButtonClicked: false,
     }
 
     onAddIngredientClick = (type) => {
@@ -64,6 +67,12 @@ class BurgerBuilder extends Component {
         });
     }
 
+    onOrderButtonClick() {
+        this.setState({
+            orderButtonClicked: true,
+        })
+    }
+
     render(){
         const disabledInfo = {
             ...this.state.ingredients
@@ -74,13 +83,17 @@ class BurgerBuilder extends Component {
 
         return (
             <Aux>
+                <Modal showModal={this.state.orderButtonClicked}>
+                    <OrderSummary ingredients = {this.state.ingredients} />
+                </Modal>
                 <Burger ingredients={this.state.ingredients} />
                 <BuildControls 
                     totalPrice={this.state.totalPrice}
                     disabledInfo={disabledInfo}
                     onAddIngredientClick={this.onAddIngredientClick} 
                     onRemoveIngredientClick={this.onRemoveIngredientClick} 
-                    isPurchaseable={this.state.isPurchaseable} />
+                    isPurchaseable={this.state.isPurchaseable}
+                    onOrderButtonClick={this.onOrderButtonClick.bind(this)} />
             </Aux>
         )
     }
