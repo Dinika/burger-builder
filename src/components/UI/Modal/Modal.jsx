@@ -8,7 +8,9 @@ class Modal extends Component {
         console.log('Modal WillUpdate');
     }
     shouldComponentUpdate(nextProps, nextState) {
-        return this.props.showModal !== nextProps.showModal
+        return (
+            this.props.showModal !== nextProps.showModal ||
+            this.props.children !== nextProps.children);
     }
     render() {
         return (
