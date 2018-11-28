@@ -6,6 +6,7 @@ import Modal from '../../components/UI/Modal/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 import Loader from '../../components/UI/Loader/Loader';
 import axios from '../../axios-order';
+import withErrorHandler from '../../HOC/withErrorhandler/withErrorHandler';
 
 const INGREDIENT_PRICES = {
     salad: 0.4,
@@ -16,16 +17,20 @@ const INGREDIENT_PRICES = {
 
 class BurgerBuilder extends Component {
     state = {
-        ingredients: {
-            salad: 0,
-            bacon: 0,
-            cheese: 0,
-            meat: 0,
-        },
+        ingredients: null,
         totalPrice: 2,
         isPurchaseable: false,
         orderButtonClicked: false,
         loading: false,
+        error: null,
+    }
+
+    componentDidMount() {
+        axios.get('https://burger-builder-19d47.firebaseio.com/ingredients')
+            .then(response => {
+                this.setState({ingredients: response.data})
+            })
+            .catch(error => {this.setState({error: error})});
     }
 
     onAddIngredientClick = (type) => {
@@ -99,11 +104,14 @@ class BurgerBuilder extends Component {
             }
         }
         axios.post('/orders.json', order)
-            .then(response => this.setState({loading: false}))
+            .then(response => {
+                this.setState({loading: false, orderButtonClicked: false})
+                return response
+            })
             .catch(error => {
-                this.setState({loading: false})
+                this.setState({loading: false, orderButtonClicked: false})
                 console.log(error)
-            });        
+            });
     }
 
     render(){
@@ -113,30 +121,41 @@ class BurgerBuilder extends Component {
         for (let key in disabledInfo) {
             disabledInfo[key] = disabledInfo[key] === 0;
         }
-        const orderSummaryOrLoader = this.state.loading ? 
-            <Loader /> :
-            <OrderSummary 
-                ingredients={this.state.ingredients} 
-                onPurchaseCancelled={this.onPurchaseCancelled.bind(this)}
-                onPurchaseConfirmed={this.onPurchaseConfirmed.bind(this)}
-                totalPrice={this.state.totalPrice}
-            />  
+        let orderSummaryOrLoader = null;
+        let burgerAndBuildControls = this.state.error ? <p>The ingredients could not be loaded due to a network error</p> : <Loader />;
+        if(this.state.ingredients) {
+            burgerAndBuildControls = (
+                <Aux>
+                    <Burger ingredients={this.state.ingredients} />
+                    <BuildControls 
+                        totalPrice={this.state.totalPrice}
+                        disabledInfo={disabledInfo}
+                        onAddIngredientClick={this.onAddIngredientClick} 
+                        onRemoveIngredientClick={this.onRemoveIngredientClick} 
+                        isPurchaseable={this.state.isPurchaseable}
+                        onOrderButtonClick={this.onOrderButtonClick.bind(this)} />
+                </Aux>
+            );
+            orderSummaryOrLoader = (
+                <OrderSummary 
+                    ingredients={this.state.ingredients} 
+                    onPurchaseCancelled={this.onPurchaseCancelled.bind(this)}
+                    onPurchaseConfirmed={this.onPurchaseConfirmed.bind(this)}
+                    totalPrice={this.state.totalPrice}
+                />);
+        }
+        if(this.state.loading) {
+            orderSummaryOrLoader = <Loader />
+        } 
         return (
             <Aux>
                 <Modal showModal={this.state.orderButtonClicked} onPurchaseCancelled={this.onPurchaseCancelled.bind(this)}>
                     {orderSummaryOrLoader}     
                 </Modal>
-                <Burger ingredients={this.state.ingredients} />
-                <BuildControls 
-                    totalPrice={this.state.totalPrice}
-                    disabledInfo={disabledInfo}
-                    onAddIngredientClick={this.onAddIngredientClick} 
-                    onRemoveIngredientClick={this.onRemoveIngredientClick} 
-                    isPurchaseable={this.state.isPurchaseable}
-                    onOrderButtonClick={this.onOrderButtonClick.bind(this)} />
+                {burgerAndBuildControls}
             </Aux>
         )
     }
 }
 
-export default BurgerBuilder;
+export default withErrorHandler(BurgerBuilder, axios);
