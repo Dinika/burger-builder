@@ -43,7 +43,7 @@ class BurgerBuilder extends Component {
         const updatedPrice = this.state.totalPrice + INGREDIENT_PRICES[type];
         this.setState({
             ingredients: updatedIngredients,
-            totalPrice: updatedPrice
+            totalPrice: updatedPrice,
         });
         this.checkIfPurchaseable(updatedIngredients);
     }
@@ -61,7 +61,7 @@ class BurgerBuilder extends Component {
         const updatedPrice = this.state.totalPrice - INGREDIENT_PRICES[type];
         this.setState({
             ingredients: updatedIngredients,
-            totalPrice: updatedPrice
+            totalPrice: updatedPrice,
         });
         this.checkIfPurchaseable(updatedIngredients);
     }
@@ -88,30 +88,16 @@ class BurgerBuilder extends Component {
     }
 
     onPurchaseConfirmed() {
-        this.setState({loading: true})
-        const order = {
-            ingredients: this.state.ingredients,
-            totalPrice: this.state.totalPrice,
-            deliveryMethod: 'fast',
-            customer: {
-                name: 'David',
-                email: 'dcaro@test.com',
-                address: {
-                    street: '21 Amour Street',
-                    pinCode: '696969',
-                    country: 'Spain',
-                }
-            }
+        let queryParams = []
+        for(let i in this.state.ingredients) {
+            queryParams.push(encodeURIComponent(i) + "=" + encodeURIComponent(this.state.ingredients[i]))
         }
-        axios.post('/orders.json', order)
-            .then(response => {
-                this.setState({loading: false, orderButtonClicked: false})
-                return response
-            })
-            .catch(error => {
-                this.setState({loading: false, orderButtonClicked: false})
-                console.log(error)
-            });
+        queryParams.push('totalPrice=' + this.state.totalPrice.toFixed(2));
+        const queryString = queryParams.join('&');
+        this.props.history.push({
+            pathname: '/checkout',
+            search: '?'+ queryString,
+        });
     }
 
     render(){
