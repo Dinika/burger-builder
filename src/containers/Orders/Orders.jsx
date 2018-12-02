@@ -4,7 +4,7 @@ import axios from '../../axios-order';
 
 class Orders extends Component {
     state = {
-        orders: null,
+        orders: [],
         loading: true,
     }
     componentDidMount() {
@@ -21,15 +21,21 @@ class Orders extends Component {
                     orders: fetchedOrders,
                     loading: false,
                 })
+                console.log(fetchedOrders);
             })
             .catch(error => {
                 this.setState({loading: false});
             })
     }
     render(){
-        return(
+        return (
             <div>
-                <Order />
+                {this.state.orders.map(order => (
+                    <Order
+                        key={order.key}
+                        ingredients={order.ingredients}
+                        totalPrice={order.totalPrice} />
+                ))}
             </div>
         )
     }
