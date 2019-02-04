@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import classes from './ContactForm.module.css';
 import Button from '../../../components/UI/Button/Button';
 import Loader from '../../../components/UI/Loader/Loader';
@@ -135,10 +136,9 @@ class ContactForm extends Component {
     updatedInputElement.isValid = isValid;
     updatedInputElement.touched = true;
     updatedOrderForm[inputIdentifier] = updatedInputElement;
+    console.log(updatedOrderForm);
     for (let key in updatedOrderForm) {
-      if (updatedOrderForm[key].isValid) {
-        isFormValid = updatedOrderForm[key].isValid && isFormValid;
-      }
+      isFormValid = updatedOrderForm[key].isValid && isFormValid;
     }
     this.setState({ orderForm: updatedOrderForm, isFormValid });
   }
@@ -186,4 +186,11 @@ class ContactForm extends Component {
   }
 }
 
-export default ContactForm;
+const mapStateToProps = state => {
+  return {
+    ingredients: state.ingredients,
+    totalPrice: state.totalPrice
+  };
+};
+
+export default connect(mapStateToProps)(ContactForm);
