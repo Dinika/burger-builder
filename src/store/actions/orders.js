@@ -10,9 +10,13 @@ export const purchaseBurgerSuccess = payload => ({
   payload
 });
 
-export const purchaseBurgerError = payload => ({
+export const purchaseBurgerError = error => ({
   type: actionTypes.PURCHASE_BURGER_ERROR,
-  payload
+  error
+});
+
+export const purchaseInit = () => ({
+  type: actionTypes.PURCHASE_INIT
 });
 
 export const purchaseBurger = payload => {
