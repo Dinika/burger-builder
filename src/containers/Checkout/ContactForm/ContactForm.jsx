@@ -5,10 +5,11 @@ import Button from '../../../components/UI/Button/Button';
 import Loader from '../../../components/UI/Loader/Loader';
 import axios from '../../../axios-order';
 import InputElement from '../../../components/UI/InputElement/InputElement';
+import withErrorHandler from '../../../HOC/withErrorhandler/withErrorHandler';
+import * as orderActions from '../../../store/actions/index';
 
 class ContactForm extends Component {
   state = {
-    loading: false,
     isFormValid: false,
     orderForm: {
       name: {
@@ -88,7 +89,6 @@ class ContactForm extends Component {
 
   confirmOrder(event) {
     event.preventDefault();
-    this.setState({ loading: true });
     let orderData = {};
     for (let key in this.state.orderForm) {
       orderData[key] = this.state.orderForm[key].value;
@@ -98,16 +98,7 @@ class ContactForm extends Component {
       totalPrice: this.props.totalPrice,
       orderData: orderData
     };
-    axios
-      .post('/orders.json', order)
-      .then(response => {
-        this.setState({ loading: false });
-        return response;
-      })
-      .catch(error => {
-        this.setState({ loading: false });
-        console.log(error);
-      });
+    this.props.onPurchaseBurgerStart(order);
   }
 
   checkValidity(value, rules) {
@@ -174,7 +165,7 @@ class ContactForm extends Component {
         </Button>
       </form>
     );
-    if (this.state.loading) {
+    if (this.props.loading) {
       spinnerOrForm = <Loader />;
     }
     return (
@@ -189,8 +180,18 @@ class ContactForm extends Component {
 const mapStateToProps = state => {
   return {
     ingredients: state.ingredients,
-    totalPrice: state.totalPrice
+    totalPrice: state.totalPrice,
+    loading: state.loading
   };
 };
 
-export default connect(mapStateToProps)(ContactForm);
+const mapDispatchToProps = dispatch => {
+  return {
+    onPurchaseBurgerStart: order => dispatch(orderActions.purchaseBurger(order))
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withErrorHandler(ContactForm, axios));

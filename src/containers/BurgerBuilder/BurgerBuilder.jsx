@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import * as actionTypes from '../../store/actions';
+import * as burgerBuilderActions from '../../store/actions/index';
 import Aux from '../../HOC/Aux';
 import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
@@ -12,20 +12,11 @@ import withErrorHandler from '../../HOC/withErrorhandler/withErrorHandler';
 
 class BurgerBuilder extends Component {
   state = {
-    orderButtonClicked: false,
-    loading: false,
-    error: null
+    orderButtonClicked: false
   };
 
   componentDidMount() {
-    axios
-      .get('https://burger-builder-19d47.firebaseio.com/ingredients.json')
-      .then(response => {
-        this.setState({ ingredients: response.data });
-      })
-      .catch(error => {
-        this.setState({ error: error });
-      });
+    this.props.initializeIngredients();
   }
 
   checkIfPurchaseable() {
@@ -61,7 +52,7 @@ class BurgerBuilder extends Component {
       disabledInfo[key] = disabledInfo[key] === 0;
     }
     let orderSummaryOrLoader = null;
-    let burgerAndBuildControls = this.state.error ? (
+    let burgerAndBuildControls = this.props.error ? (
       <p>The ingredients could not be loaded due to a network error</p>
     ) : (
       <Loader />
@@ -89,9 +80,6 @@ class BurgerBuilder extends Component {
         />
       );
     }
-    if (this.state.loading) {
-      orderSummaryOrLoader = <Loader />;
-    }
     return (
       <Aux>
         <Modal
@@ -109,18 +97,21 @@ class BurgerBuilder extends Component {
 const mapStateToProps = state => {
   return {
     ingredients: state.ingredients,
-    totalPrice: state.totalPrice
+    totalPrice: state.totalPrice,
+    error: state.error
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     onIngredientAdded: ingredient =>
-      dispatch({ type: actionTypes.ADD_INGREDIENT, payload: { ingredient } }),
+      dispatch(burgerBuilderActions.addIngredient(ingredient)),
     onIngredientRemoved: ingredient =>
-      dispatch({ type: actionTypes.REMOVE_INGREDIENT, payload: { ingredient } })
+      dispatch(burgerBuilderActions.removeIngredient(ingredient)),
+    initializeIngredients: () => dispatch(burgerBuilderActions.initIngredient())
   };
 };
+
 export default connect(
   mapStateToProps,
   mapDispatchToProps
