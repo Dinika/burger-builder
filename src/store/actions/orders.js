@@ -34,3 +34,38 @@ export const purchaseBurger = payload => {
       });
   };
 };
+
+export const fetchOrdersStart = () => ({
+  type: actionTypes.FETCH_ORDERS_START
+});
+
+export const fetchOrdersSuccess = payload => ({
+  type: actionTypes.FETCH_ORDERS_SUCCESS,
+  payload
+});
+
+export const fetchOrdersError = payload => ({
+  type: actionTypes.FETCH_ORDERS_ERROR,
+  payload
+});
+
+export const fetchOrders = () => {
+  return dispatch => {
+    dispatch(fetchOrdersStart());
+    axios
+      .get('/orders.json')
+      .then(response => {
+        let fetchedOrders = [];
+        for (let key in response.data) {
+          fetchedOrders.push({
+            ...response.data[key],
+            key: key
+          });
+        }
+        dispatch(fetchOrdersSuccess(fetchedOrders));
+      })
+      .catch(error => {
+        dispatch(fetchOrdersError(error));
+      });
+  };
+};
