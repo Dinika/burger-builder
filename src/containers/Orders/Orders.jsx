@@ -13,13 +13,15 @@ class Orders extends Component {
   render() {
     let loaderOrOrders = <Loader />;
     if (!this.props.loading) {
-      loaderOrOrders = this.props.orders.map(order => (
-        <Order
-          key={order.key}
-          ingredients={order.ingredients}
-          totalPrice={order.totalPrice}
-        />
-      ));
+      loaderOrOrders = this.props.orders.map(order => {
+        return (
+          <Order
+            key={order.key}
+            ingredients={order.ingredients}
+            totalPrice={order.totalPrice}
+          />
+        );
+      });
     }
     return <div>{loaderOrOrders}</div>;
   }

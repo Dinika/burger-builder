@@ -127,7 +127,6 @@ class ContactForm extends Component {
     updatedInputElement.isValid = isValid;
     updatedInputElement.touched = true;
     updatedOrderForm[inputIdentifier] = updatedInputElement;
-    console.log(updatedOrderForm);
     for (let key in updatedOrderForm) {
       isFormValid = updatedOrderForm[key].isValid && isFormValid;
     }

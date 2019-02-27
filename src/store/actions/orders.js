@@ -25,7 +25,6 @@ export const purchaseBurger = payload => {
     axios
       .post('/orders.json', payload)
       .then(response => {
-        console.log(response.data);
         dispatch(purchaseBurgerSuccess(response.data));
         return response;
       })

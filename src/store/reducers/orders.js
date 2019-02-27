@@ -6,47 +6,60 @@ const initialState = {
   purchased: false
 };
 
+const purchaseInit = (state, action) => ({
+  ...state,
+  purchased: false
+});
+
+const purchaseBurgerStart = (state, action) => ({
+  ...state,
+  loading: true
+});
+
+const purchaseBurgerSuccess = (state, action) => ({
+  ...state,
+  loading: false,
+  purchased: true,
+  orders: [...state.orders, action.payload]
+});
+
+const purchaseBurgerError = (state, action) => ({
+  ...state,
+  loading: false
+});
+
+const fetchOrdersStart = (state, action) => ({
+  ...state,
+  loading: true
+});
+
+const fetchOrdersSuccess = (state, action) => ({
+  ...state,
+  loading: false,
+  orders: action.payload
+});
+
+const fetchOrdersError = (state, action) => ({
+  ...state,
+  loading: false
+});
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.PURCHASE_INIT:
-      return {
-        ...state,
-        purchased: false
-      };
+      return purchaseInit(state, action);
     case actionTypes.PURCHASE_BURGER_START:
-      return {
-        ...state,
-        loading: true
-      };
+      return purchaseBurgerStart(state, action);
     case actionTypes.PURCHASE_BURGER_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        purchased: true,
-        orders: [...state.orders, action.payload]
-      };
+      return purchaseBurgerSuccess(state, action);
     case actionTypes.PURCHASE_BURGER_ERROR:
-      return {
-        ...state,
-        loading: false
-      };
+      return purchaseBurgerError(state, action);
     case actionTypes.FETCH_ORDERS_START:
-      return {
-        ...state,
-        loading: true
-      };
+      return fetchOrdersStart(state, action);
     case actionTypes.FETCH_ORDERS_SUCCESS:
-      console.log(action.payload);
-      return {
-        ...state,
-        loading: false,
-        orders: action.payload
-      };
+      return fetchOrdersSuccess(state, action);
     case actionTypes.FETCH_ORDERS_ERROR:
-      return {
-        ...state,
-        loading: false
-      };
+      return fetchOrdersError(state, action);
     default:
       return state;
   }
