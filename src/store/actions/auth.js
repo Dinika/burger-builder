@@ -23,6 +23,18 @@ export const authError = payload => ({
   payload
 });
 
+export const logout = () => ({
+  type: actionTypes.AUTH_LOGOUT
+});
+
+export const checkTokenExpiry = expiryTime => {
+  return dispatch => {
+    setTimeout(() => {
+      dispatch(logout());
+    }, expiryTime * 1000);
+  };
+};
+
 export const auth = (email, password, isSignUp) => {
   return dispatch => {
     dispatch(authStart());
@@ -36,11 +48,13 @@ export const auth = (email, password, isSignUp) => {
           userId: response.data.localId
         };
         dispatch(authSuccess(payload));
+        dispatch(checkTokenExpiry(response.data.expiresIn));
       })
       .catch(error => {
         let payload = {
-          error
+          error: error.response.data.error
         };
+        console.log(error.response.data.error);
         dispatch(authError(payload));
       });
   };

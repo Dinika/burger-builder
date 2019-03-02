@@ -4,6 +4,7 @@ import InputElement from '../../components/UI/InputElement/InputElement';
 import Button from '../../components/UI/Button/Button';
 import classes from '../Auth/Auth.module.css';
 import * as actions from '../../store/actions/index';
+import Loader from '../../components/UI/Loader/Loader';
 
 class Auth extends Component {
   state = {
@@ -104,7 +105,7 @@ class Auth extends Component {
         config: this.state.controls[key]
       });
     }
-    const form = (
+    const formOrLoader = !this.props.loading ? (
       <form onSubmit={event => this.onFormSubmitted(event)}>
         {formElementsArray.map(formElement => (
           <InputElement
@@ -120,10 +121,17 @@ class Auth extends Component {
         ))}
         <Button type="Success">Authenticate</Button>
       </form>
+    ) : (
+      <Loader />
     );
+
+    const errorMessage = this.props.error ? (
+      <p>{this.props.error.message}</p>
+    ) : null;
     return (
       <div className={classes.Auth}>
-        {form}
+        {errorMessage}
+        {formOrLoader}
         <Button
           type="Danger"
           onButtonClicked={this.onAuthMethodChanged.bind(this)}
@@ -135,6 +143,13 @@ class Auth extends Component {
   }
 }
 
+const mapStateToProps = state => {
+  return {
+    loading: state.auth.loading,
+    error: state.auth.error
+  };
+};
+
 const mapDispatchToProps = dispatch => {
   return {
     onAuthenticate: (email, password, isSignUp) =>
@@ -143,6 +158,6 @@ const mapDispatchToProps = dispatch => {
 };
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(Auth);
