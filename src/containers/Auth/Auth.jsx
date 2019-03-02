@@ -7,6 +7,7 @@ import * as actions from '../../store/actions/index';
 
 class Auth extends Component {
   state = {
+    isSignUp: true,
     controls: {
       email: {
         elementType: 'input',
@@ -84,8 +85,15 @@ class Auth extends Component {
     event.preventDefault();
     this.props.onAuthenticate(
       this.state.controls.email.value,
-      this.state.controls.password.value
+      this.state.controls.password.value,
+      this.state.isSignUp
     );
+  }
+
+  onAuthMethodChanged() {
+    this.setState(prevState => {
+      return { isSignUp: !prevState.isSignUp };
+    });
   }
 
   render() {
@@ -113,13 +121,24 @@ class Auth extends Component {
         <Button type="Success">Authenticate</Button>
       </form>
     );
-    return <div className={classes.Auth}>{form}</div>;
+    return (
+      <div className={classes.Auth}>
+        {form}
+        <Button
+          type="Danger"
+          onButtonClicked={this.onAuthMethodChanged.bind(this)}
+        >
+          Switch to {this.state.isSignUp ? 'SignIn' : 'SignUp'}
+        </Button>
+      </div>
+    );
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    onAuthenticate: (email, password) => dispatch(actions.auth(email, password))
+    onAuthenticate: (email, password, isSignUp) =>
+      dispatch(actions.auth(email, password, isSignUp))
   };
 };
 
