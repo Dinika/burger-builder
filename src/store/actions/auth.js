@@ -18,9 +18,9 @@ export const authSuccess = payload => ({
   payload
 });
 
-export const authError = error => ({
+export const authError = payload => ({
   type: actionTypes.AUTH_ERROR,
-  error
+  payload
 });
 
 export const auth = (email, password, isSignUp) => {
@@ -31,12 +31,17 @@ export const auth = (email, password, isSignUp) => {
     axios
       .post(url, authData)
       .then(response => {
-        console.log(response.data);
-        dispatch(authSuccess(response.data));
+        let payload = {
+          tokenId: response.data.idToken,
+          userId: response.data.localId
+        };
+        dispatch(authSuccess(payload));
       })
       .catch(error => {
-        console.log(error);
-        dispatch(authError());
+        let payload = {
+          error
+        };
+        dispatch(authError(payload));
       });
   };
 };
