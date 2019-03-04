@@ -42,7 +42,7 @@ class Layout extends Component {
 
 const mapStateToProps = state => {
   return {
-    isAuthenticated: state.auth.tokenId
+    isAuthenticated: state.auth.tokenId !== null
   };
 };
 
