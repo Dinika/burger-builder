@@ -98,7 +98,7 @@ class ContactForm extends Component {
       totalPrice: this.props.totalPrice,
       orderData: orderData
     };
-    this.props.onPurchaseBurgerStart(order);
+    this.props.onPurchaseBurgerStart(this.props.tokenId, order);
   }
 
   checkValidity(value, rules) {
@@ -191,13 +191,15 @@ const mapStateToProps = state => {
   return {
     ingredients: state.burger.ingredients,
     totalPrice: state.burger.totalPrice,
-    loading: state.orders.loading
+    loading: state.orders.loading,
+    tokenId: state.auth.tokenId
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    onPurchaseBurgerStart: order => dispatch(orderActions.purchaseBurger(order))
+    onPurchaseBurgerStart: (tokenId, order) =>
+      dispatch(orderActions.purchaseBurger(tokenId, order))
   };
 };
 

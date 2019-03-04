@@ -19,11 +19,11 @@ export const purchaseInit = () => ({
   type: actionTypes.PURCHASE_INIT
 });
 
-export const purchaseBurger = payload => {
+export const purchaseBurger = (tokenId, payload) => {
   return dispatch => {
     dispatch(purchaseBurgerStart());
     axios
-      .post('/orders.json', payload)
+      .post('/orders.json?auth=' + tokenId, payload)
       .then(response => {
         dispatch(purchaseBurgerSuccess(response.data));
         return response;
@@ -48,11 +48,11 @@ export const fetchOrdersError = payload => ({
   payload
 });
 
-export const fetchOrders = () => {
+export const fetchOrders = tokenId => {
   return dispatch => {
     dispatch(fetchOrdersStart());
     axios
-      .get('/orders.json')
+      .get('/orders.json?auth=' + tokenId)
       .then(response => {
         let fetchedOrders = [];
         for (let key in response.data) {
