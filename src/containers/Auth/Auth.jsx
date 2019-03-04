@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 import InputElement from '../../components/UI/InputElement/InputElement';
 import Button from '../../components/UI/Button/Button';
 import classes from '../Auth/Auth.module.css';
@@ -128,8 +129,14 @@ class Auth extends Component {
     const errorMessage = this.props.error ? (
       <p>{this.props.error.message}</p>
     ) : null;
+
+    let redirectToHomePage = this.props.isAuthenticated ? (
+      <Redirect to="/" />
+    ) : null;
+
     return (
       <div className={classes.Auth}>
+        {redirectToHomePage}
         {errorMessage}
         {formOrLoader}
         <Button
@@ -146,7 +153,8 @@ class Auth extends Component {
 const mapStateToProps = state => {
   return {
     loading: state.auth.loading,
-    error: state.auth.error
+    error: state.auth.error,
+    isAuthenticated: state.auth.tokenId
   };
 };
 
