@@ -10,7 +10,8 @@ const INGREDIENT_PRICES = {
 const initialState = {
   ingredients: null,
   totalPrice: 2,
-  error: false
+  error: false,
+  buildingTheBurger: false
 };
 
 const addIngredient = (state, action) => ({
@@ -20,7 +21,8 @@ const addIngredient = (state, action) => ({
     [action.payload.ingredient]:
       state.ingredients[action.payload.ingredient] + 1
   },
-  totalPrice: state.totalPrice + INGREDIENT_PRICES[action.payload.ingredient]
+  totalPrice: state.totalPrice + INGREDIENT_PRICES[action.payload.ingredient],
+  buildingTheBurger: true
 });
 
 const removeIngredient = (state, action) => ({
@@ -30,14 +32,16 @@ const removeIngredient = (state, action) => ({
     [action.payload.ingredient]:
       state.ingredients[action.payload.ingredient] - 1
   },
-  totalPrice: state.totalPrice - INGREDIENT_PRICES[action.payload.ingredient]
+  totalPrice: state.totalPrice - INGREDIENT_PRICES[action.payload.ingredient],
+  buildingTheBurger: true
 });
 
 const setIngredients = (state, action) => ({
   ...state,
   ingredients: action.payload.ingredients,
   error: false,
-  totalPrice: 2
+  totalPrice: 2,
+  buildingTheBurger: false
 });
 
 const fetchIngredientsError = (state, action) => ({

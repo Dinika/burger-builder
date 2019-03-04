@@ -4,6 +4,9 @@ import { Redirect } from 'react-router-dom';
 import * as actions from '../../../store/actions/index';
 
 class Logout extends Component {
+  componentDidMount() {
+    this.props.logoutUser();
+  }
   render() {
     return <Redirect to="/" />;
   }

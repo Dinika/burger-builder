@@ -1,13 +1,16 @@
 import React from 'react';
 import NavigationItem from './NavigationItem/NavigationItem';
 import classes from './NavigationMenu.module.css';
+import Aux from '../../HOC/Aux';
 
 const NavigationMenu = props => (
   <ul className={classes.NavigationMenu}>
     <NavigationItem link="/">BurgerBuilder</NavigationItem>
-    <NavigationItem link="/orders">Orders</NavigationItem>
     {props.isAuthenticated ? (
-      <NavigationItem link="/logout">Logout</NavigationItem>
+      <Aux>
+        <NavigationItem link="/orders">Orders</NavigationItem>
+        <NavigationItem link="/logout">Logout</NavigationItem>
+      </Aux>
     ) : (
       <NavigationItem link="/login">Login</NavigationItem>
     )}
