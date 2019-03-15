@@ -8,7 +8,7 @@ import Loader from '../../components/UI/Loader/Loader';
 
 class Orders extends Component {
   componentDidMount() {
-    this.props.onFetchOrders(this.props.tokenId);
+    this.props.onFetchOrders(this.props.tokenId, this.props.userId);
   }
   render() {
     let loaderOrOrders = <Loader />;
@@ -31,13 +31,15 @@ const mapStateToProps = state => {
   return {
     orders: state.orders.orders,
     loading: state.orders.loading,
-    tokenId: state.auth.tokenId
+    tokenId: state.auth.tokenId,
+    userId: state.auth.userId
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    onFetchOrders: tokenId => dispatch(actions.fetchOrders(tokenId))
+    onFetchOrders: (tokenId, userId) =>
+      dispatch(actions.fetchOrders(tokenId, userId))
   };
 };
 

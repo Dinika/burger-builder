@@ -48,11 +48,12 @@ export const fetchOrdersError = payload => ({
   payload
 });
 
-export const fetchOrders = tokenId => {
+export const fetchOrders = (tokenId, userId) => {
   return dispatch => {
     dispatch(fetchOrdersStart());
+    const queryParams = `?auth=${tokenId}&orderBy="userId"&equalTo="${userId}"`;
     axios
-      .get('/orders.json?auth=' + tokenId)
+      .get('/orders.json' + queryParams)
       .then(response => {
         let fetchedOrders = [];
         for (let key in response.data) {

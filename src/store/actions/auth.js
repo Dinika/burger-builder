@@ -23,9 +23,14 @@ export const authError = payload => ({
   payload
 });
 
-export const logout = () => ({
-  type: actionTypes.AUTH_LOGOUT
-});
+export const logout = () => {
+  localStorage.removeItem('token');
+  localStorage.removeItem('expirationDate');
+  localStorage.removeItem('userId');
+  return {
+    type: actionTypes.AUTH_LOGOUT
+  };
+};
 
 export const checkTokenExpiry = expiryTime => {
   return dispatch => {
@@ -43,12 +48,18 @@ export const auth = (email, password, isSignUp) => {
     axios
       .post(url, authData)
       .then(response => {
+        const expirationDate = new Date(
+          new Date().getTime() + response.data.expiresIn * 1000
+        );
         let payload = {
           tokenId: response.data.idToken,
           userId: response.data.localId
         };
         dispatch(authSuccess(payload));
         dispatch(checkTokenExpiry(response.data.expiresIn));
+        localStorage.setItem('token', response.data.idToken);
+        localStorage.setItem('expirationDate', expirationDate);
+        localStorage.setItem('userId', response.data.localId);
       })
       .catch(error => {
         let payload = {
@@ -66,3 +77,23 @@ export const setAuthRedirectPath = path => ({
     path: path
   }
 });
+
+export const tryAutoSignIn = () => {
+  return dispatch => {
+    const tokenId = localStorage.getItem('token');
+    const userId = localStorage.getItem('userId');
+    const expirationDate = new Date(localStorage.getItem('expirationDate'));
+    if (!tokenId) {
+      dispatch(logout());
+    } else {
+      const timeLeft = (expirationDate.getTime() - new Date().getTime()) / 1000;
+      if (timeLeft > 0) {
+        const payload = { tokenId, userId };
+        dispatch(authSuccess(payload));
+        dispatch(checkTokenExpiry(expirationDate.getSeconds()));
+      } else {
+        dispatch(logout());
+      }
+    }
+  };
+};
