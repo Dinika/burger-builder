@@ -65,7 +65,6 @@ export const auth = (email, password, isSignUp) => {
         let payload = {
           error: error.response.data.error
         };
-        console.log(error.response.data.error);
         dispatch(authError(payload));
       });
   };

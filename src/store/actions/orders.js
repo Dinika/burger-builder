@@ -62,7 +62,6 @@ export const fetchOrders = (tokenId, userId) => {
             key: key
           });
         }
-        console.log(fetchedOrders);
         dispatch(fetchOrdersSuccess(fetchedOrders));
       })
       .catch(error => {
