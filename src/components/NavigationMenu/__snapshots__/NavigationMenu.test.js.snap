@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`NavigationMenu renders with no props passed 1`] = `
+<ul
+  className="NavigationMenu"
+>
+  <NavigationItem
+    link="/"
+  >
+    BurgerBuilder
+  </NavigationItem>
+  <NavigationItem
+    link="/login"
+  >
+    Login
+  </NavigationItem>
+</ul>
+`;
