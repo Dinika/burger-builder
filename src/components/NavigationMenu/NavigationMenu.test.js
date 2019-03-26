@@ -10,7 +10,6 @@ expect.addSnapshotSerializer(createSerializer({ mode: 'deep' }));
 
 describe('NavigationMenu', () => {
   let wrapper;
-
   beforeEach(() => {
     wrapper = shallow(<NavigationMenu />);
   });
@@ -26,5 +25,12 @@ describe('NavigationMenu', () => {
   it('should have 3 NavigationLinks if authenticated', () => {
     wrapper.setProps({ isAuthenticated: true });
     expect(wrapper.find(NavigationItem)).toHaveLength(3);
+  });
+
+  it('should have a Logout link if user authenticated', () => {
+    wrapper.setProps({ isAuthenticated: true });
+    expect(
+      wrapper.contains(<NavigationItem link="/logout">Logout</NavigationItem>)
+    ).toBe(true);
   });
 });

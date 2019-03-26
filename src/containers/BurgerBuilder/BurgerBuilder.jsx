@@ -10,7 +10,7 @@ import Loader from '../../components/UI/Loader/Loader';
 import axios from '../../axios-order';
 import withErrorHandler from '../../HOC/withErrorhandler/withErrorHandler';
 
-class BurgerBuilder extends Component {
+export class BurgerBuilder extends Component {
   state = {
     orderButtonClicked: false
   };
