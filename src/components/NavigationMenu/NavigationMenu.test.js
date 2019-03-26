@@ -9,13 +9,22 @@ configure({ adapter: new Adapter() });
 expect.addSnapshotSerializer(createSerializer({ mode: 'deep' }));
 
 describe('NavigationMenu', () => {
+  let wrapper;
+
+  beforeEach(() => {
+    wrapper = shallow(<NavigationMenu />);
+  });
+
   it('renders with no props passed', () => {
-    const wrapper = shallow(<NavigationMenu />);
     expect(wrapper).toMatchSnapshot();
   });
 
   it('should have 2 NavigationLinks if not authenticated', () => {
-    const wrapper = shallow(<NavigationMenu />);
     expect(wrapper.find(NavigationItem)).toHaveLength(2);
+  });
+
+  it('should have 3 NavigationLinks if authenticated', () => {
+    wrapper.setProps({ isAuthenticated: true });
+    expect(wrapper.find(NavigationItem)).toHaveLength(3);
   });
 });
