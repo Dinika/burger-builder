@@ -54,21 +54,7 @@ export const setAuthRedirectPath = path => ({
 });
 
 export const tryAutoSignIn = () => {
-  return dispatch => {
-    const tokenId = localStorage.getItem('token');
-    const userId = localStorage.getItem('userId');
-    const expirationDate = new Date(localStorage.getItem('expirationDate'));
-    if (!tokenId) {
-      dispatch(logout());
-    } else {
-      const timeLeft = (expirationDate.getTime() - new Date().getTime()) / 1000;
-      if (timeLeft > 0) {
-        const payload = { tokenId, userId };
-        dispatch(authSuccess(payload));
-        dispatch(checkTokenExpiry(expirationDate.getSeconds()));
-      } else {
-        dispatch(logout());
-      }
-    }
+  return {
+    type: actionTypes.AUTH_INITIATE_AUTO_SIGNIN
   };
 };

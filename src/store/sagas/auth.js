@@ -51,3 +51,21 @@ export function* authSaga(action) {
     yield put(actions.authError(payload));
   }
 }
+
+export function* tryAutoSignInSaga(action) {
+  const tokenId = localStorage.getItem('token');
+  const userId = localStorage.getItem('userId');
+  const expirationDate = new Date(localStorage.getItem('expirationDate'));
+  if (!tokenId) {
+    yield put(actions.logout());
+  } else {
+    const timeLeft = (expirationDate.getTime() - new Date().getTime()) / 1000;
+    if (timeLeft > 0) {
+      const payload = { tokenId, userId };
+      yield put(actions.authSuccess(payload));
+      yield put(actions.checkTokenExpiry(expirationDate.getSeconds()));
+    } else {
+      yield put(actions.logout());
+    }
+  }
+}

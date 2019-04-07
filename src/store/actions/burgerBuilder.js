@@ -11,24 +11,17 @@ export const removeIngredient = ingredient => ({
   payload: { ingredient }
 });
 
-const setIngredients = ingredients => ({
+export const setIngredients = ingredients => ({
   type: actionTypes.SET_INGREDIENTS,
   payload: { ingredients }
 });
 
-const fetchIngredientsError = () => ({
+export const fetchIngredientsError = () => ({
   type: actionTypes.FETCH_INGREDIENTS_ERROR
 });
 
 export const initIngredient = () => {
-  return dispatch => {
-    axios
-      .get('https://burger-builder-19d47.firebaseio.com/ingredients.json')
-      .then(response => {
-        dispatch(setIngredients(response.data));
-      })
-      .catch(error => {
-        dispatch(fetchIngredientsError());
-      });
+  return {
+    type: actionTypes.INIT_INGREDIENTS_START
   };
 };
