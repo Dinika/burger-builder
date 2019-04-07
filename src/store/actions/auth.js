@@ -24,19 +24,23 @@ export const authError = payload => ({
 });
 
 export const logout = () => {
-  // localStorage.removeItem('token');
-  // localStorage.removeItem('expirationDate');
-  // localStorage.removeItem('userId');
   return {
     type: actionTypes.AUTH_INITIATE_LOGOUT
   };
 };
 
+export const didLogout = () => {
+  return {
+    type: actionTypes.AUTH_LOGOUT
+  };
+};
+
 export const checkTokenExpiry = expiryTime => {
-  return dispatch => {
-    setTimeout(() => {
-      dispatch(logout());
-    }, expiryTime * 1000);
+  return {
+    type: actionTypes.AUTH_CHECK_TIMEOUT,
+    payload: {
+      expiryTime
+    }
   };
 };
 
