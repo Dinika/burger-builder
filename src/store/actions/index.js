@@ -6,7 +6,17 @@ export {
   fetchIngredientsError
 } from './burgerBuilder';
 
-export { purchaseBurger, purchaseInit, fetchOrders } from './orders';
+export {
+  purchaseBurger,
+  purchaseInit,
+  fetchOrders,
+  fetchOrdersStart,
+  fetchOrdersSuccess,
+  fetchOrdersError,
+  purchaseBurgerError,
+  purchaseBurgerSuccess,
+  purchaseBurgerStart
+} from './orders';
 
 export {
   auth,

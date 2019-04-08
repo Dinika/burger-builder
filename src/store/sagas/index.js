@@ -6,6 +6,7 @@ import {
   tryAutoSignInSaga
 } from './auth';
 import { initIngredientSaga } from './burgerBuilder';
+import { fetchOrdersSaga, purchaseBurgerSaga } from './orders';
 import { takeEvery } from 'redux-saga/effects';
 
 export function* watchAuth() {
@@ -17,4 +18,9 @@ export function* watchAuth() {
 
 export function* watchBurgerBuilder() {
   yield takeEvery(actionTypes.INIT_INGREDIENTS_START, initIngredientSaga);
+}
+
+export function* watchOrders() {
+  yield takeEvery(actionTypes.POST_ORDER_DATA, purchaseBurgerSaga);
+  yield takeEvery(actionTypes.FETCH_ORDERS, fetchOrdersSaga);
 }
