@@ -1,44 +1,36 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import Aux from '../../HOC/Aux';
 import styles from './Layout.module.css';
 import Toolbar from '../../components/Toolbar/Toolbar';
 import SideDrawer from '../../components/SideDrawer/SideDrawer';
 
-class Layout extends Component {
-  state = {
-    sideDrawerOpened: false
-  };
+const Layout = props => {
+  const [isSideDrawerOpned, setIsSideDrawerOpened] = useState(false);
 
-  onSideDrawerOpened() {
-    this.setState({
-      sideDrawerOpened: true
-    });
+  function onSideDrawerOpened() {
+    setIsSideDrawerOpened(true);
   }
 
-  onSideDrawerClosed() {
-    this.setState({
-      sideDrawerOpened: false
-    });
+  function onSideDrawerClosed() {
+    setIsSideDrawerOpened(false);
   }
 
-  render() {
-    return (
-      <Aux>
-        <Toolbar
-          isAuthenticated={this.props.isAuthenticated}
-          onSideDrawerOpened={this.onSideDrawerOpened.bind(this)}
-        />
-        <SideDrawer
-          isAuthenticated={this.props.isAuthenticated}
-          sideDrawerOpened={this.state.sideDrawerOpened}
-          onSideDrawerClosed={this.onSideDrawerClosed.bind(this)}
-        />
-        <main className={styles.Content}>{this.props.children}</main>
-      </Aux>
-    );
-  }
-}
+  return (
+    <Aux>
+      <Toolbar
+        isAuthenticated={props.isAuthenticated}
+        onSideDrawerOpened={onSideDrawerOpened}
+      />
+      <SideDrawer
+        isAuthenticated={props.isAuthenticated}
+        sideDrawerOpened={isSideDrawerOpned}
+        onSideDrawerClosed={onSideDrawerClosed}
+      />
+      <main className={styles.Content}>{props.children}</main>
+    </Aux>
+  );
+};
 
 const mapStateToProps = state => {
   return {
