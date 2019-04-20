@@ -12,7 +12,7 @@ const Orders = props => {
   }, []);
 
   let loaderOrOrders = <Loader />;
-  if (!props.loading) {
+  if (!props.loading && props.orders) {
     loaderOrOrders = props.orders.map(order => {
       return (
         <Order
