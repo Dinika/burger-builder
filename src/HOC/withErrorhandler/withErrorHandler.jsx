@@ -1,31 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import useHttpErrorHandler from '../../hooks/error-handler-hook';
 import Aux from '../Aux';
 import Modal from '../../components/UI/Modal/Modal';
 
 const withErrorHandler = (WrappedComponent, axios) => {
   return props => {
-    const [error, setError] = useState(null);
-    let reqInterceptor = axios.interceptors.request.use(req => {
-      setError(null);
-      return req;
-    });
-    let resInterceptor = axios.interceptors.response.use(
-      res => res,
-      error => {
-        setError(error);
-      }
-    );
-    useEffect(() => {
-      return () => {
-        axios.interceptors.request.eject(reqInterceptor);
-        axios.interceptors.response.eject(resInterceptor);
-      };
-    }, [reqInterceptor, resInterceptor]);
-
-    function onPurchaseCancelled() {
-      setError(null);
-    }
-
+    const [error, onPurchaseCancelled] = useHttpErrorHandler(axios);
     return (
       <Aux>
         <Modal showModal={error} onPurchaseCancelled={onPurchaseCancelled}>
